@@ -1,5 +1,13 @@
-# This is just an example to get you started. A typical binary package
-# uses this file as the main entry point of the application.
+import nimini_lib
+
+proc fetch(obj: var TransactionResult, url: string) =
+    obj.createTransactionResult(transaction(url))
+
+var nimini: TransactionResult = TransactionResult()
+const TESTINGURL = "gemini://gemini.circumlunar.space/"
 
 when isMainModule:
-  echo("Hello, World!")
+    nimini.fetch(TESTINGURL)
+    echo nimini.statusCode #20
+    nimini.fetch(TESTINGURL&"sntensretn")
+    echo nimini.statusCode #51

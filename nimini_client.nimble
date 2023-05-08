@@ -11,3 +11,4 @@ bin           = @["nimini_client"]
 # Dependencies
 
 requires "nim >= 1.6.10"
+requires "https://github.com/carkwilkinson/nimini-library"
