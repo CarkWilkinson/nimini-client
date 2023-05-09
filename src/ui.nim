@@ -7,14 +7,14 @@ proc clearScreen*()
 proc textLine(line: string)
 proc headerLine(line: string, size: int)
 proc listLine(line: string)
+proc linkLine(line: string)
 proc quoteLine(line: string)
-proc textLine(line: string)
 proc preFormattedLine(line: string)
 proc blankLine()
 
 proc printBody*(lines: seq[string]) =
    
-    for line: string in lines:
+    for line in lines:
         block outer:
             if line.len < 1:
                 blankLine()
@@ -22,29 +22,45 @@ proc printBody*(lines: seq[string]) =
             if line[0..2] == "```":
                 preFormatted = not preFormatted
                 break outer
-            if preFomatted:
+            if preFormatted:
                 preFormattedLine(line)
                 break outer
 
             case line[0]:
-                of "=":
+                of '=':
                     if line[0..2] == "=> ":
                         linkLine(line)
                     else:
                         textLine(line)
-                of "#":
-                    if line[1] == "#":
-                        if line[2] == "#":
+                of '#':
+                    if line[1] == '#':
+                        if line[2] == '#':
                             headerLine(line, 3)
                         else:
                             headerLine(line, 2)
                     else:
                         headerLine(line, 1)
-                of "*":
+                of '*':
                     listLine(line)
-                of ">":
+                of '>':
                     quoteLine(line)
                 else:
                     textLine(line)
 
+proc clearScreen*() =
+     echo "\e[2J"
+proc textLine(line: string) = 
+    echo line
+proc headerLine(line: string, size: int) =
+    echo line
+proc listLine(line: string) =
+    echo "*    " & line[1..^1]
+proc linkLine(line: string) =
+    echo "LINK: " & line[3..^1]
+proc quoteLine(line: string) =
+    echo ">    " & line[1..^1]
+proc preFormattedLine(line: string) =
+    textLine(line)
+proc blankLine() =
+    echo ""
 

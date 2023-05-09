@@ -1,5 +1,6 @@
-1. outline functions
-2. Make  it work, handle redirects + status codes
+DONE1. outline functions
+DONE2. Make  it work,
+2.5 handle redirects + status codes
 3. generate function interface
 4. Start slowly improving available interface
 
