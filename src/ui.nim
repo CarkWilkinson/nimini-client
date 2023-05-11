@@ -1,5 +1,6 @@
 # Functions for drawing to terminal on certain events
 # Parameters will be passed in from main file based on transaction result
+import std/strutils
 var preFormatted = false;
 
 proc printBody*(lines: seq[string])
@@ -57,7 +58,7 @@ proc headerLine(line: string, size: int) =
 proc listLine(line: string) =
     echo "*    " & line[1..^1]
 proc linkLine(line: string) =
-    echo "LINK: \e[4m" & line[3..^1] & "\e[0m"
+    echo "LINK: \e[4m" & line.split()[1] & "\e[0m" & line[line.find(line.split()[1])+line.split()[1].len.. ^1]
 proc quoteLine(line: string) =
     echo ">    " & line[1..^1]
 proc preFormattedLine(line: string) =
