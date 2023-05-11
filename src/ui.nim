@@ -49,6 +49,7 @@ proc printBody*(lines: seq[string]) =
 
 proc clearScreen*() =
      echo "\e[2J"
+     echo "\e[?7h"
 proc textLine(line: string) = 
     echo line
 proc headerLine(line: string, size: int) =
@@ -56,7 +57,7 @@ proc headerLine(line: string, size: int) =
 proc listLine(line: string) =
     echo "*    " & line[1..^1]
 proc linkLine(line: string) =
-    echo "LINK: " & line[3..^1]
+    echo "LINK: \e[4m" & line[3..^1] & "\e[0m"
 proc quoteLine(line: string) =
     echo ">    " & line[1..^1]
 proc preFormattedLine(line: string) =
