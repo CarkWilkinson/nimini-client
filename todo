@@ -1,5 +1,4 @@
-2.5 status codes
-3. generate function interface
-4. Start slowly improving available interface
+2.5 status codes (Basically done)
 
-CURRENT: vt100 escape codes, make something readable
+Current: TUI, look at inspiration file, vt100 codes won't work, what a shame
+
