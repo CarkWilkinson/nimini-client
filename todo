@@ -1,4 +1,6 @@
 2.5 status codes (Basically done)
 
 Current: TUI, look at inspiration file, vt100 codes won't work, what a shame
+1. c2nim a good tui library?
+2. nimwave?
 
