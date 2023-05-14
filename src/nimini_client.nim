@@ -31,7 +31,8 @@ const cmds: seq[string] = @[
     "connect",
     "help",
     "exit",
-    "clear"
+    "clear",
+    "version"
     ]
 const help: string = """
 NIMINI
@@ -44,6 +45,7 @@ clear:   clears screen
 exit:    exits program
     usage: \"exit\"
 """
+const version: string = r"DEVELOPMENT"
 
 #Main method
 when isMainModule:
@@ -67,6 +69,8 @@ when isMainModule:
                 echo help
             of "clear":
                 clearScreen()
+            of "version":
+                echo "nimini client version: " & version
             of "exit":
                 run = false
                 break
