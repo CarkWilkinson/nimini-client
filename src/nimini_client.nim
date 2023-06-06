@@ -21,29 +21,37 @@ proc fetch(obj: var TransactionResult, url: string)
 proc connect(target: string)
 proc getInput(self: var Input)
 proc validateInput(self: var Input): ValidCmd
+proc links()
+proc generateLinks()
 
 #Variable declarations
 var client: TransactionResult = TransactionResult()
 var input: Input = ("base", "base", @["base"])
-var run = true;
+var run = true
+var linkSequence: seq[string] = @["gemini://gemini.circumlunar.space/", "gemini://geminispace.info/", "gemini://geminiquickst.art/"]
 const TESTINGURL = "gemini://gemini.circumlunar.space/"
 const cmds: seq[string] = @[
     "connect",
     "help",
     "exit",
     "clear",
-    "version"
+    "version",
+    "links"
     ]
 const help: string = """
 NIMINI
 connect: connects to gemini url
-    usage: \"connect gemini://gemini.circumlunar.space/\" 
+    usage: "connect gemini://gemini.circumlunar.space/" 
 help:    prints this message
-    usage: \"help\"
+    usage: "help"
 clear:   clears screen
-    usage: \"clear\"
+    usage: "clear"
 exit:    exits program
-    usage: \"exit\"
+    usage: "exit"
+links:   lists available links
+    usage: "links"
+links X: connects to link number X
+    usage: "links 3"
 """
 const version: string = r"DEVELOPMENT"
 
@@ -71,6 +79,8 @@ when isMainModule:
                 clearScreen()
             of "version":
                 echo "nimini client version: " & version
+            of "links":
+                links()
             of "exit":
                 run = false
                 break
@@ -81,10 +91,17 @@ when isMainModule:
 
 #Procedure declarations
 proc connect(target: string) =
-    client.fetch(target)
+    var targetFixed: string = target
+    if targetFixed[0..8] != "gemini://":
+        if targetFixed[0] != '/':
+            targetFixed = "/" & targetFixed;
+        targetFixed = "gemini:/" & targetFixed;
+
+    client.fetch(targetFixed)
     case client.simpleCode:
         of 2:
             printBody(client.responseLines)
+            generateLinks()
         of 1:
             echo "No input support yet"
         of 3:
@@ -98,7 +115,29 @@ proc connect(target: string) =
         else:
             echo "uh oh"
 
-    
+proc generateLinks() = 
+    linkSequence = @[];
+    for line in client.responseLines:
+        var link: string
+        if line.len() > 2:
+            case line[0..2]:
+                of "=> ":
+                    var temp: string = line[3..^1].split()[0]
+                    link = temp
+                    linkSequence.add(link) 
+                else:
+                    link = ""
+
+
+proc links() =
+    case input.parameters.len():
+        of 0:
+            echo linkSequence
+        of 1:
+            connect(linkSequence[input.parameters[0].parseInt()])
+        else:
+            echo "Too many parameters, view help"
+
 proc fetch(obj: var TransactionResult, url: string) =
     obj.createTransactionResult(transaction(url))
 
